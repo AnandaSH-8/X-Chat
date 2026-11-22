@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
 const generateAvatar = require("../utils/generateAvatar");
+const { getAuth } = require("../config/firebaseAdmin");
 
 // Cookie configuration shared by login and logout.
 const getCookieOptions = () => ({
@@ -215,9 +216,21 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
+// GET /api/users/firebase-token
+const getFirebaseToken = async (req, res) => {
+  try {
+    const firebaseToken = await getAuth().createCustomToken(req.user._id.toString());
+    return res.status(200).json({ success: true, data: { firebaseToken } });
+  } catch (error) {
+    console.error("Firebase token error:", error);
+    return res.status(500).json({ success: false, message: "Could not generate Firebase token" });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
   getCurrentUser,
+  getFirebaseToken,
 };

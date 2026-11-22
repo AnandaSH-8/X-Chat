@@ -5,6 +5,7 @@ const {
   loginUser,
   logoutUser,
   getCurrentUser,
+  getFirebaseToken,
 } = require("../controllers/authController");
 
 const { searchUsers } = require("../controllers/userController");
@@ -21,5 +22,6 @@ router.post("/login", loginUser);
 router.get("/logout", protect, logoutUser);
 router.get("/me", protect, getCurrentUser);
 router.get("/search", protect, searchUsers);
+router.get("/firebase-token", protect, getFirebaseToken);
 
 module.exports = router;

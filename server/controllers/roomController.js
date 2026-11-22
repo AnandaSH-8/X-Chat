@@ -57,7 +57,7 @@ const initializeRoom = async (req, res) => {
     if (room) {
       return res.status(200).json({
         success: true,
-        data: room,
+        data: toRoomDTO(room),
         message: "Room initialized successfully",
       });
     }
@@ -83,7 +83,7 @@ const initializeRoom = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      data: room,
+      data: toRoomDTO(room),
       message: "Room initialized successfully",
     });
   } catch (error) {
@@ -94,6 +94,13 @@ const initializeRoom = async (req, res) => {
       message: "Something went wrong while initializing the room",
     });
   }
+};
+
+const toRoomDTO = (room) => {
+  const obj = room.toObject();
+  obj.members = obj.users;
+  delete obj.users;
+  return obj;
 };
 
 // GET /api/rooms/userrooms
@@ -107,7 +114,7 @@ const getUserRooms = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      data: rooms,
+      data: rooms.map(toRoomDTO),
       message: "Rooms fetched successfully",
     });
   } catch (error) {

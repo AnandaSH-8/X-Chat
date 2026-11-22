@@ -6,7 +6,7 @@ import { setOnline } from "../firebase/presenceService";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setUser } = useAuthContext();
+  const { setUser, signIntoFirebase } = useAuthContext();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
@@ -21,6 +21,10 @@ const Login = () => {
       const user = res.data.data.user;
       setUser(user);
       setOnline(user._id);
+      await Promise.race([
+        signIntoFirebase(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000)),
+      ]).catch(() => {});
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
