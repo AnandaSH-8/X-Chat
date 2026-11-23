@@ -219,7 +219,11 @@ const getCurrentUser = async (req, res) => {
 // GET /api/users/firebase-token
 const getFirebaseToken = async (req, res) => {
   try {
-    const firebaseToken = await getAuth().createCustomToken(req.user._id.toString());
+    const auth = getAuth();
+    if (!auth) {
+      return res.status(503).json({ success: false, message: "Firebase not configured" });
+    }
+    const firebaseToken = await auth.createCustomToken(req.user._id.toString());
     return res.status(200).json({ success: true, data: { firebaseToken } });
   } catch (error) {
     console.error("Firebase token error:", error);
