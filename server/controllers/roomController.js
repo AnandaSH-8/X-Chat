@@ -99,7 +99,6 @@ const initializeRoom = async (req, res) => {
 const toRoomDTO = (room) => {
   const obj = room.toObject();
   obj.members = obj.users;
-  delete obj.users;
   return obj;
 };
 

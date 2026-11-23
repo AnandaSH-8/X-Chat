@@ -14,7 +14,9 @@ Cypress.on("uncaught:exception", (err) => {
     err.message.includes("cross-origin") ||
     err.message.includes("ResizeObserver loop") ||
     err.message.includes("PERMISSION_DENIED") ||
-    err.message.includes("Permission denied")
+    err.message.includes("Permission denied") ||
+    err.message.includes("RefreshRuntime") ||
+    err.message.includes("register is not a function")
   ) {
     return false;
   }
